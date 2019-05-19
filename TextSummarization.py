@@ -2,6 +2,7 @@ import re
 import heapq
 import nltk
 import pandas as pd
+import math
 
 # nltk.download('punkt')
 # nltk.download('stopwords')
@@ -10,7 +11,10 @@ import pandas as pd
 path = 'C:\\Users\\Tanachart\\Desktop\\dataset\\'
 filename = "1_Population.csv"
 dataset = pd.read_csv(path + filename, header=None)
-article_text = ' '.join(dataset[0])
+commentList = dataset[0]
+likeList = dataset[1]
+
+article_text = ' '.join(commentList)
 
 # Removing Square Brackets and Extra Spaces
 article_text = re.sub(r'\[[0-9]*\]', ' ', article_text)
@@ -52,16 +56,29 @@ for sent in sentence_list:
                 else:
                     sentence_scores[sent] += word_frequencies[word]
 
+
+
+print(sentence_scores.values())
+for i in range(len(commentList)):
+    for j in range(len(list(sentence_scores.keys()))):
+        if list(sentence_scores.keys())[j] in commentList[i]:
+            likeWeight = (likeList[i] / sum(likeList)) * list(sentence_scores.values())[j]
+            if not math.isnan(likeWeight):
+                print(likeWeight)
+                newValue = list(sentence_scores.values())[j] + likeWeight
+                sentence_scores[list(sentence_scores.keys())[j]] = newValue
+
+print("\n")
+print(sentence_scores)
+
+
 # Calculate number of line to be display after summarization
 numberOfLine = round(len(nltk.word_tokenize(formatted_article_text)) / 100)
 if numberOfLine > 3:
     numberOfLine = 3
 summary_sentences = heapq.nlargest(4, sentence_scores, key=sentence_scores.get)
 
-# key = list(sentence_scores.keys())
-# print(key[0])
-# print(sentence_scores.keys())
-# print(word_frequencies.keys())
+
 
 print(filename)
 print("========== ORIGINAL SENTENCES ==========")
