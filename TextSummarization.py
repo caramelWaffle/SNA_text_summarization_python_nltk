@@ -8,8 +8,8 @@ import math
 # nltk.download('stopwords')
 
 # Read comment from CSV file
-path = 'C:\\Users\\Tanachart\\Desktop\\dataset\\'
-filename = "1_Population.csv"
+path = 'C:\\Users\\Tanachart\\Desktop\\dataset_with_like\\'
+filename = "12_Cyprus.csv"
 dataset = pd.read_csv(path + filename, header=None)
 commentList = dataset[0]
 likeList = dataset[1]
@@ -56,9 +56,10 @@ for sent in sentence_list:
                 else:
                     sentence_scores[sent] += word_frequencies[word]
 
+print("Default score")
+print(sentence_scores)
 
-
-print(sentence_scores.values())
+print("\nlike score")
 for i in range(len(commentList)):
     for j in range(len(list(sentence_scores.keys()))):
         if list(sentence_scores.keys())[j] in commentList[i]:
@@ -68,9 +69,8 @@ for i in range(len(commentList)):
                 newValue = list(sentence_scores.values())[j] + likeWeight
                 sentence_scores[list(sentence_scores.keys())[j]] = newValue
 
-print("\n")
+print("\nSum with like")
 print(sentence_scores)
-
 
 # Calculate number of line to be display after summarization
 numberOfLine = round(len(nltk.word_tokenize(formatted_article_text)) / 100)
@@ -78,8 +78,7 @@ if numberOfLine > 3:
     numberOfLine = 3
 summary_sentences = heapq.nlargest(4, sentence_scores, key=sentence_scores.get)
 
-
-
+print("\n")
 print(filename)
 print("========== ORIGINAL SENTENCES ==========")
 print(sentence_list)
