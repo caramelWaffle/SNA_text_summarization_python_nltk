@@ -8,9 +8,9 @@ import pandas as pd
 
 # Read comment from CSV file
 path = 'C:\\Users\\Tanachart\\Desktop\\dataset\\'
-filename = "12_Cyprus.csv"
-csvdf = pd.read_csv(path + filename, header=None)
-article_text = ' '.join(csvdf[0])
+filename = "1_Population.csv"
+dataset = pd.read_csv(path + filename, header=None)
+article_text = ' '.join(dataset[0])
 
 # Removing Square Brackets and Extra Spaces
 article_text = re.sub(r'\[[0-9]*\]', ' ', article_text)
@@ -56,7 +56,12 @@ for sent in sentence_list:
 numberOfLine = round(len(nltk.word_tokenize(formatted_article_text)) / 100)
 if numberOfLine > 3:
     numberOfLine = 3
-summary_sentences = heapq.nlargest(3, sentence_scores, key=sentence_scores.get)
+summary_sentences = heapq.nlargest(4, sentence_scores, key=sentence_scores.get)
+
+# key = list(sentence_scores.keys())
+# print(key[0])
+# print(sentence_scores.keys())
+# print(word_frequencies.keys())
 
 print(filename)
 print("========== ORIGINAL SENTENCES ==========")
