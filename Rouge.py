@@ -1,7 +1,7 @@
 import json
 from rouge import Rouge
 
-with open('./document.json') as f:
+with open('./text_rank_model_japan_document.json',encoding="utf8") as f:
     data = json.load(f)
 
 listData = list(data)
