@@ -8,8 +8,8 @@ import math
 # nltk.download('stopwords')
 
 # Read comment from CSV file
-path = 'C:\\Users\\Tanachart\\Desktop\\dataset_with_like\\'
-filename = "12_Cyprus.csv"
+path = 'C:\\Users\\Tanachart\\Desktop\\AsianFacts\\dataset_with_like\\'
+filename = "1_Population.csv"
 dataset = pd.read_csv(path + filename, header=None)
 commentList = dataset[0]
 likeList = dataset[1]
@@ -29,6 +29,12 @@ formatted_article_text = re.sub(r'\s+', ' ', formatted_article_text)
 # using NLTK's recommended sentence tokenizer
 sentence_list = nltk.sent_tokenize(article_text)
 
+# print("original text")
+# print(article_text)
+# print("Sentence Segmentation")
+# print(sentence_list)
+# print("Word Tokenization")
+# print(nltk.word_tokenize(formatted_article_text))
 # Get list of stopword
 stopwords = nltk.corpus.stopwords.words('english')
 
@@ -72,17 +78,28 @@ for i in range(len(commentList)):
 print("\nSum with like")
 print(sentence_scores)
 
-# Calculate number of line to be display after summarization
-numberOfLine = round(len(nltk.word_tokenize(formatted_article_text)) / 100)
-if numberOfLine > 3:
-    numberOfLine = 3
-summary_sentences = heapq.nlargest(4, sentence_scores, key=sentence_scores.get)
+print('number of all sentences : '+str(len(sentence_list)))
+inputNumber = input("Enter number of sentences (%) : ")
+
+if int(inputNumber) > 100:
+    inputNumber = 100
+
+numberOfLine = round((int(inputNumber) * len(sentence_list))/100)
+if numberOfLine < 1:
+    numberOfLine = 1
+
+# # Calculate number of line to be display after summarization
+# numberOfLine = round(len(nltk.word_tokenize(formatted_article_text)) / 100)
+# if numberOfLine > 3:
+#     numberOfLine = 3
+
+summary_sentences = heapq.nlargest(numberOfLine, sentence_scores, key=sentence_scores.get)
 
 print("\n")
 print(filename)
 print("========== ORIGINAL SENTENCES ==========")
 print(sentence_list)
-print('Number of words : '+ str(len(nltk.word_tokenize(formatted_article_text))))
+print('Number of words : ' + str(len(nltk.word_tokenize(formatted_article_text))))
 summary = ' '.join(summary_sentences)
 print("========== SUMMARY SENTENCES ==========")
 print(summary)
